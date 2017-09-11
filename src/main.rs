@@ -34,8 +34,9 @@ fn main() {
       let content: String = m.content
         .chars()
         .filter(|x| x.is_whitespace() || x.is_alphanumeric())
+        .flat_map(char::to_lowercase)
         .collect();
-      let bad = content.split_whitespace().find(|x| GAS.contains(&x.to_lowercase().as_str()));
+      let bad = content.split_whitespace().find(|x| GAS.contains(&x));
       if let Some(b) = bad {
         discord.send_message(
           m.channel_id,
