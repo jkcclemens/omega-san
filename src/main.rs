@@ -5,7 +5,7 @@ use std::env::var;
 use discord::Discord;
 use discord::model::Event;
 
-const GAS: [&'static str; 8] = [
+const GAS: [&'static str; 24] = [
   "v1s", "d1s",
   "v2s", "d2s",
   "v3s", "d3s",
