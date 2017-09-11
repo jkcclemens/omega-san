@@ -1,24 +1,19 @@
 extern crate discord;
 extern crate dotenv;
+extern crate regex;
+#[macro_use]
+extern crate lazy_static;
 
-use std::env::var;
 use discord::Discord;
 use discord::model::Event;
 
-const GAS: [&'static str; 24] = [
-  "v1s", "d1s",
-  "v2s", "d2s",
-  "v3s", "d3s",
-  "v4s", "d4s",
-  "v5s", "d5s",
-  "v6s", "d6s",
-  "v7s", "d7s",
-  "v8s", "d8s",
-  "v9s", "d9s",
-  "v10s", "d10s",
-  "v11s", "d11s",
-  "v12s", "d12s"
-];
+use regex::Regex;
+
+use std::env::var;
+
+lazy_static! {
+  static ref GAS: Regex = Regex::new(r"\b(?:[vd](\d{1,2})s|[vdo]s(\d{1,2}))\b").unwrap();
+}
 
 fn main() {
   dotenv::dotenv().ok();
@@ -44,14 +39,15 @@ fn main() {
         .filter(|x| x.is_whitespace() || x.is_alphanumeric())
         .flat_map(char::to_lowercase)
         .collect();
-      let bad = content.split_whitespace().find(|x| GAS.contains(x));
-      if let Some(b) = bad {
-        discord.send_message(
-          m.channel_id,
-          &format!("Did you mean *o{}*?", &b[1..]),
-          "",
-          false
-        ).ok();
+      if let Some(captures) = GAS.captures(&content) {
+        if let Some(mat) = captures.get(1).or_else(|| captures.get(2)) {
+          discord.send_message(
+            m.channel_id,
+            &format!("Did you mean *o{}s*?", mat.as_str()),
+            "",
+            false
+          ).ok();
+        }
       }
     }
   }
