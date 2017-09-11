@@ -9,7 +9,15 @@ const GAS: [&'static str; 8] = [
   "v1s", "d1s",
   "v2s", "d2s",
   "v3s", "d3s",
-  "v4s", "d4s"
+  "v4s", "d4s",
+  "v5s", "d5s",
+  "v6s", "d6s",
+  "v7s", "d7s",
+  "v8s", "d8s",
+  "v9s", "d9s",
+  "v10s", "d10s",
+  "v11s", "d11s",
+  "v12s", "d12s"
 ];
 
 fn main() {
