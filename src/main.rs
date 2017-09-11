@@ -31,7 +31,11 @@ fn main() {
     };
 
     if let Event::MessageCreate(ref m) = event {
-      let bad = m.content.split_whitespace().find(|x| GAS.contains(&x.to_lowercase().as_str()));
+      let content: String = m.content
+        .chars()
+        .filter(|x| x.is_whitespace() || x.is_alphanumeric())
+        .collect();
+      let bad = content.split_whitespace().find(|x| GAS.contains(&x.to_lowercase().as_str()));
       if let Some(b) = bad {
         discord.send_message(
           m.channel_id,
