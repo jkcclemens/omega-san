@@ -12,7 +12,7 @@ use regex::Regex;
 use std::env::var;
 
 lazy_static! {
-  static ref GAS: Regex = Regex::new(r"\b(?:[vd](\d{1,2})s|[vdo]s(\d{1,2}))\b").unwrap();
+  static ref GAS: Regex = Regex::new(r"\b(?:[vd](\d{1,2})s|[vdo]s(\d{1,2}))\b").expect("Regex should have worked");
 }
 
 fn main() {
@@ -20,9 +20,9 @@ fn main() {
 
   let bot_token = var("OMEGA_DISCORD_TOKEN").expect("No Discord token");
 
-  let discord = Discord::from_bot_token(&bot_token).unwrap();
+  let discord = Discord::from_bot_token(&bot_token).expect("Could not create Discord with token");
 
-  let (mut connection, _) = discord.connect().unwrap();
+  let (mut connection, _) = discord.connect().expect("Could not establish connection");
 
   loop {
     let event = match connection.recv_event() {
